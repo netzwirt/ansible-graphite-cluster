@@ -1,0 +1,67 @@
+---
+# tasks file for netzwirt.graphite-cluster
+
+
+- name: install graphite-packages
+  apt:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+  - graphite-carbon 
+  - graphite-web
+  - libapache2-mod-wsgi
+  - unzip
+  - apache2
+  - python-mysqldb
+  - python-psycopg2
+  
+     
+- name: configure carbon cache/relay/web
+  template:
+    src: etc/{{ item }}.j2
+    dest: /etc/{{ item }}
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+  - "default/graphite-carbon"
+  - "graphite/local_settings.py"
+  - "carbon/storage-schemas.conf"
+  - "carbon/carbon.conf"
+  notify:
+  - restart carbon-cache
+  - restart carbon-relay
+
+
+- name: carbon cache/relay init script
+  template:
+    src: "etc/init.d/{{ item }}.j2"
+    dest: "/etc/init.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+  - carbon-cache
+  - carbon-relay
+
+
+- name: start and enable carbon-cache/relay
+  service: 
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+  - carbon-cache
+  - carbon-relay
+        
+        
+- include: apache2.yml
+
+
+# syncdb only on one host
+- name: syncdb
+  command: "graphite-manage syncdb"
+  register: _graphite_syncdb
+  when: graphitedb_initialize_database and inventory_hostname == groups[graphite_groupname][0]
+  changed_when: "{{ 'Installed 0 object' not in _graphite_syncdb.stdout }}"
+  

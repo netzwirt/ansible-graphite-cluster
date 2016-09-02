@@ -1,0 +1,20 @@
+---
+# handlers file for amana.icinga2
+
+- name: restart apache2
+  service: 
+    name: apache2 
+    state: restarted
+    enabled: yes
+
+        
+- name: restart carbon-cache
+  service: 
+    name: carbon-cache 
+    state: restarted
+
+    
+- name: restart carbon-relay
+  service: 
+    name: carbon-relay 
+    state: restarted

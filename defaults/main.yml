@@ -1,0 +1,32 @@
+---
+# defaults file for netzwirt.graphite-cluster
+
+# If you use consistent-hashing you can add redundancy by replicating every
+# datapoint to more than one machine.
+graphite_replication_factor: 2
+
+# One per cpu should be a good start
+carbon_caches: 3
+
+graphite_groupname: 'graphite'
+
+graphite_apache_port: 85
+
+
+graphite_secret_key: "{{ lookup('password', inventory_dir + '/storage/' + inventory_hostname + '/secret length=32') }}"
+graphite_timezone: "Europe/Zurich"
+graphite_debug: false
+
+carbon_line_port_start: 2303
+carbon_pickle_port_start: 2404
+carbon_cache_port_start: 7002
+
+
+# these values are only required when graphite is also installd
+graphitedb_type: 'mysql' # mysql or postgresql_psycopg2
+graphitedb_user: 'root'
+graphitedb_password: ''
+graphitedb_host: 'localhost'
+graphitedb_database: 'icinga2graphite'
+graphitedb_port: ''
+graphitedb_initialize_database: True
