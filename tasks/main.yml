@@ -14,6 +14,7 @@
   - apache2
   - python-mysqldb
   - python-psycopg2
+  - python-pymysql
   
      
 - name: configure carbon cache/relay/web
@@ -60,7 +61,7 @@
 
 # syncdb only on one host
 - name: syncdb
-  command: "graphite-manage syncdb"
+  command: "graphite-manage migrate"
   register: _graphite_syncdb
   when: graphitedb_initialize_database and inventory_hostname == groups[graphite_groupname][0]
   changed_when: "{{ 'Installed 0 object' not in _graphite_syncdb.stdout }}"
