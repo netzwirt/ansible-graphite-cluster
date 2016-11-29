@@ -18,7 +18,7 @@ NAME=carbon-cache
 DAEMON=/usr/bin/$NAME
 DAEMON_ARGS="--config=/etc/carbon/carbon.conf --logdir=/var/log/carbon/ start"
 SCRIPTNAME=/etc/init.d/$NAME
-CACHES="{% for cache_id in range(0,carbon_caches) %}{{ cache_id|cache_enum }} {% endfor %}"
+CACHES="{% for cache_id in range(0,carbon_caches|int) %}{{ cache_id|cache_enum }} {% endfor %}"
 
 [ -x "$DAEMON" ] || exit 0
 

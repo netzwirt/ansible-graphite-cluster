@@ -42,17 +42,17 @@ PICKLE_RECEIVER_PORT = {{ carbon_pickle_port_start }}
 CACHE_QUERY_INTERFACE = 0.0.0.0
 CACHE_QUERY_PORT = {{ carbon_cache_port_start  }}
 
-{% for cache_id in range(1,carbon_caches) %}  
+{% for cache_id in range(1,carbon_caches|int) %}  
 [cache:{{ cache_id|cache_enum }}]
 
 LINE_RECEIVER_INTERFACE = 0.0.0.0
-LINE_RECEIVER_PORT = {{ carbon_line_port_start + cache_id }}
+LINE_RECEIVER_PORT = {{ carbon_line_port_start|int + cache_id }}
 
 PICKLE_RECEIVER_INTERFACE = 0.0.0.0
-PICKLE_RECEIVER_PORT = {{ carbon_pickle_port_start + cache_id }}
+PICKLE_RECEIVER_PORT = {{ carbon_pickle_port_start|int + cache_id }}
 
 CACHE_QUERY_INTERFACE = 0.0.0.0
-CACHE_QUERY_PORT = {{ carbon_cache_port_start + cache_id }}
+CACHE_QUERY_PORT = {{ carbon_cache_port_start|int + cache_id }}
 
 {% endfor %}
 
@@ -71,8 +71,8 @@ REPLICATION_FACTOR = {{ graphite_replication_factor }}
 
 DESTINATIONS = {% for host in groups[graphite_groupname] -%}
     {%- set outer_loop = loop -%}
-	{% for cache_id in range(0,carbon_caches) -%}  
-		{{ host|resolve_host }}:{{ carbon_pickle_port_start + cache_id }}:{{ cache_id|cache_enum }}{% if not (loop.last and outer_loop.last) %},{% endif -%}
+	{% for cache_id in range(0,carbon_caches|int) -%}  
+		{{ host|resolve_host }}:{{ carbon_pickle_port_start|int + cache_id }}:{{ cache_id|cache_enum }}{% if not (loop.last and outer_loop.last) %},{% endif -%}
 	{%- endfor %}
 {%- endfor %}
 
