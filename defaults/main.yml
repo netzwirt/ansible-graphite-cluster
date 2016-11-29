@@ -13,7 +13,7 @@ graphite_groupname: 'graphite'
 graphite_apache_port: 85
 
 
-graphite_secret_key: "{{ lookup('password', inventory_dir + '/storage/' + inventory_hostname + '/secret length=32') }}"
+graphite_secret_key: "{{ lookup('password', inventory_dir + '/storage/graphite/' + inventory_hostname + '/secret length=32') }}"
 graphite_timezone: "Europe/Zurich"
 graphite_debug: false
 
