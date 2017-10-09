@@ -16,7 +16,7 @@
 - name: enable graphite site
   command: "a2ensite graphite"
   register: _enable_graphite_site
-  changed_when: "{{ not 'already enabled' in _enable_graphite_site.stdout }}"
+  changed_when: "not 'already enabled' in _enable_graphite_site.stdout"
   notify:
   - restart apache2
   
@@ -24,7 +24,7 @@
 - name: enable graphite conf
   command: "a2enconf graphite-port"
   register: _enable_graphite_port
-  changed_when: "{{ not 'already enabled' in _enable_graphite_port.stdout }}"
+  changed_when: "not 'already enabled' in _enable_graphite_port.stdout"
   notify:
   - restart apache2
 

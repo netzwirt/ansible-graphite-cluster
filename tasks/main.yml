@@ -64,5 +64,5 @@
   command: "graphite-manage migrate"
   register: _graphite_syncdb
   when: graphitedb_initialize_database and inventory_hostname == groups[graphite_groupname][0]
-  changed_when: "{{ 'Installed 0 object' not in _graphite_syncdb.stdout }}"
+  changed_when: "'Installed 0 object' not in _graphite_syncdb.stdout"
   
